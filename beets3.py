@@ -10,6 +10,73 @@ os.environ['SPOTIPY_CLIENT_ID']='929032b8613349b68ccf481619c25fa6'
 os.environ['SPOTIPY_CLIENT_SECRET']='75089110568743bebc5e4bb68b033bbd'
 os.environ['SPOTIPY_REDIRECT_URI']='http://google.com/'
 
+turn = 1
+count = 0
+board = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+game_won  = False
+player = 'X'
+
+def print_divider():
+    print("-------------")
+    
+def print_board(board):
+    print(" " + board[6] + " " + "|" + " " + board[7] + " " + "|" + " " + board[8])
+    print_divider()
+    print(" " + board[3] + " " + "|" + " " + board[4] + " " + "|" + " " + board[5])
+    print_divider()
+    print(" " + board[0] + " " + "|" + " " + board[1] + " " + "|" + " " + board[2])
+
+def win_game():
+    global player, board, game_won
+
+    hor1 = [board[0], board[1], board[2]]
+    hor2 = [board[3], board[4], board[5]]
+    hor3 = [board[6], board[7], board[8]]
+    diag1 = [board[0], board[4], board[8]]
+    diag2 = [board[6], board[4], board[2]]
+    ver1 = [board[0], board[3], board[6]]
+    ver2 = [board[1], board[4], board[7]]
+    ver3 = [board[2], board[5], board[8]]
+    
+    win_conditions = [hor1, hor2, hor3, diag1, diag2, ver1, ver2, ver3]
+    print(hor1)
+    for win in win_conditions:
+        if win.count('X') == 3:
+            game_won = True
+            print(f'congrats {player} you win')
+        elif win.count('O') == 3:
+            game_won = True
+            print(f'congrats {player} you win')
+    get_move()
+
+def get_move():
+    global game_won
+    while game_won == False:
+        move()
+        print_board(board)
+        turn_switcher()
+        win_game()
+    
+def turn_switcher():
+    global turn, player
+    turn *= -1
+    if turn == 1:
+        player = 'X'
+    if turn == -1:
+        player = 'O'
+
+def move():
+    global count, board, turn, player
+    player_move = int(input('Please enter a square: '))
+    if board[player_move-1] == 'X' or board[player_move-1] =='O':
+        get_move()
+    board[player_move-1] = player
+    count += 1
+
+def game():
+    print_board(board)
+    get_move()
+
 # Get username from terminal
 
 username = sys.argv[1]
@@ -32,29 +99,41 @@ user_devices = spotifyObject.devices()
 # print(user_devices)
 device_id = (user_devices['devices'][0]['id'])
 # print(device_id)
+choice = ''
 
 displayName = user['display_name']
 followers = user['followers']['total']
 
 print(displayName)
 
+choices = ['0 - Exit', '1 - Search by Artist', '2 - Search by Album', '3 - Search by Song', '4 - Play Pic-Pax']
+
 while True:
     print()
+    print('Please enter a choice between 0 and 4: ')
     print('>>> Welcome to Beets 3.0 ' + displayName + '!')
     print('>>> You have ' + str(followers) + ' followers.')
-    print('0 - Exit')
-    print('1 - Search by Artist')
-    print('2 - Search by Album')
-    print('3 - Search by Song')
     print()
-    choice = input('Your choice: ')
+    for num in choices:
+        print(num)
+    print()
+    choice = int(input('Your choice: '))
+
+    if choice > 4:
+        print()
+        print('Invalid response. Please enter a choice between 0 and 4: ')
+        for num in choices:
+            print(num)
+        print()
+        choice = int(input('Your choice: '))
+
 
     #End the program
-    if choice == '0':
+    if choice == 0:
         break
 
     #Search for an artist
-    if choice == '1':
+    if choice == 1:
         search_query_artist = input('Enter artist name: ')
         results_artist = input('How many results would you like? ')
         print()
@@ -75,7 +154,7 @@ while True:
 
         spotifyObject.start_playback(context_uri=top_track_uri, offset=None)
 
-    if choice == '2':
+    if choice == 2:
         search_query = input('Enter album name: ')
         results_album = input('How many results would you like? ')
         print()
@@ -89,7 +168,7 @@ while True:
         webbrowser.open(album_art)
         spotifyObject.start_playback(context_uri=album_uri, offset=None)
     
-    if choice == '3':
+    if choice == 3:
         search_query_track = input('Enter song name: ')
         results_track = input('How many results would you like? ')
         print()
@@ -102,5 +181,6 @@ while True:
 
         spotifyObject.start_playback(context_uri=track_uri, offset=None)
 
-
+    if choice == 4:
+        game()
         
