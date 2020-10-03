@@ -17,11 +17,19 @@ SPOTIPY_REDIRECT_URI =os.getenv('SPOTIPY_REDIRECT_URL')
 # os.environ['SPOTIPY_CLIENT_SECRET']='75089110568743bebc5e4bb68b033bbd'
 # os.environ['SPOTIPY_REDIRECT_URI']='http://google.com/'
 
-turn = 1
+turn = -1
 count = 0
 board = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 game_won  = False
 player = 'X'
+
+def init():
+    global turn, count, board, game_won, player
+    turn = -1
+    count = 0
+    board = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    game_won  = False
+    player = 'X'
 
 def print_divider():
     print("-------------")
@@ -46,22 +54,18 @@ def win_game():
     ver3 = [board[2], board[5], board[8]]
     
     win_conditions = [hor1, hor2, hor3, diag1, diag2, ver1, ver2, ver3]
-    print(hor1)
     for win in win_conditions:
-        if win.count('X') == 3:
+        if win.count('X') == 3 or win.count('O') == 3:
             game_won = True
-            print(f'congrats {player} you win')
-        elif win.count('O') == 3:
-            game_won = True
-            print(f'congrats {player} you win')
+            print(f'congrats {player} you won in {count} moves')
     get_move()
 
 def get_move():
     global game_won
     while game_won == False:
+        turn_switcher()
         move()
         print_board(board)
-        turn_switcher()
         win_game()
     
 def turn_switcher():
@@ -75,19 +79,21 @@ def turn_switcher():
 def move():
     global count, board, turn, player
     player_move = int(input('Please enter a square: '))
-    if board[player_move-1] == 'X' or board[player_move-1] =='O':
+    if board[player_move-1] == 'X' or board[player_move-1] =='O' or player_move > 9:
+        print('invalid move--that square is already assigned')
         get_move()
+
     board[player_move-1] = player
     count += 1
 
 def game():
+    init()
     print_board(board)
     get_move()
 
 # Get username from terminal
 
 username = sys.argv[1]
-# 1297289791
 
 scope = 'user-read-private user-read-playback-state user-modify-playback-state'
 
