@@ -13,10 +13,6 @@ SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 SPOTIPY_REDIRECT_URI =os.getenv('SPOTIPY_REDIRECT_URL')
 
-# os.environ['SPOTIPY_CLIENT_ID']='929032b8613349b68ccf481619c25fa6'
-# os.environ['SPOTIPY_CLIENT_SECRET']='75089110568743bebc5e4bb68b033bbd'
-# os.environ['SPOTIPY_REDIRECT_URI']='http://google.com/'
-
 turn = -1
 count = 0
 board = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
